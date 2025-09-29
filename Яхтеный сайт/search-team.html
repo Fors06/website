@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Поиск команды</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="index.html">Главная</a></li>
+                <li><a href="search-team.html">Поиск команды</a></li>
+                <li><a href="race-schedule.html">Расписание гонок</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section id="search-team">
+            <h2>Поиск команды</h2>
+            <div class="container">
+                <div class="filters">
+                    <label for="experience">Уровень опыта:</label>
+                    <select id="experience" name="experience">
+                        <option value="beginner">Начинающий</option>
+                        <option value="intermediate">Средний</option>
+                        <option value="advanced">Продвинутый</option>
+                    </select>
+                    <label for="city">Город:</label>
+                    <input type="text" id="city" name="city">
+                    <label for="team-type">Тип команды:</label>
+                    <select id="team-type" name="team-type">
+                        <option value="temporary">Временная</option>
+                        <option value="permanent">Постоянная</option>
+                    </select>
+                </div>
+                <div class="sorting">
+                    <label for="sort-by">Сортировать по:</label>
+                    <select id="sort-by" name="sort-by">
+                        <option value="date">Дате добавления</option>
+                        <option value="boat-size">Размеру яхты</option>
+                    </select>
+                    <label for="display-style">Стиль отображения:</label>
+                    <select id="display-style" name="display-style">
+                        <option value="matrix">Матрица</option>
+                        <option value="column">Столбец</option>
+                    </select>
+                </div>
+                <section id="team-results">
+                    <!-- Результаты поиска -->
+                </section>
+            </div>
+        </section>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>
