@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Вольный ветер — яхтенная платформа</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet" />
+    <style>
+        /* ===== ЦВЕТА «МОРСКАЯ СВЕЖЕСТЬ» ===== */
+        :root {
+            --primary: #0A2E5C;
+            --primary-dark: #061C3A;
+            --secondary: #1A7F8A;
+            --accent: #4DB8C4;
+            --gold: #D4AF37;
+            --bg-light: #F0F6F9;
+            --text-dark: #0A1E2E;
+            --text-light: #FFFFFF;
+            --shadow: 0 4px 20px rgba(10, 46, 92, 0.15);
+            --radius: 12px;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-light);
+            color: var(--text-dark);
+            line-height: 1.6;
+            /* === ФОН ДЛЯ ВСЕЙ СТРАНИЦЫ === */
+            background-image: url('https://images.wallpaperscraft.ru/image/single/enot_zhivotnoe_podvodnyj_1343115_1920x1080.jpg');
+            background-size: cover;
+            background-attachment: fixed;
+            background-position: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* ===== ШАПКА ===== */
+        header {
+            background: var(--primary-dark);
+            color: var(--text-light);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+        .header-inner {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 800;
+            letter-spacing: 1px;
+        }
+        .logo span { color: var(--gold); }
+        nav a {
+            color: var(--text-light);
+            text-decoration: none;
+            margin-left: 1.8rem;
+            font-weight: 500;
+            transition: 0.3s;
+            font-size: 1rem;
+        }
+        nav a:hover { color: var(--gold); }
+        .auth-buttons a {
+            background: var(--gold);
+            color: var(--primary-dark);
+            padding: 0.4rem 1.2rem;
+            border-radius: 30px;
+            font-weight: 600;
+            margin-left: 0.8rem;
+            transition: 0.3s;
+        }
+        .auth-buttons a:hover {
+            background: #e6c65a;
+            color: var(--primary-dark);
+        }
+        .auth-buttons .register {
+            background: transparent;
+            border: 2px solid var(--gold);
+            color: var(--text-light);
+        }
+        .auth-buttons .register:hover {
+            background: var(--gold);
+            color: var(--primary-dark);
+        }
+
+        .auth-icon a{
+            color: #e6c65a;
+        }
+        .auth-icon a:hover{
+            color: #4DB8C4;
+        }
+
+        .auth-icon a:active {
+            color: #FF3B30 !important;
+        }
+
+        /* 🟡 При нажатии (клик) — однократное мигание золотым */
+        .auth-icon a.clicked svg {
+            animation: flashGold 0.4s ease 1;
+        }
+
+        @keyframes flashGold {
+            0%   { color: #FFFFFF; }
+            30%  { color: #D4AF37; }
+            70%  { color: #D4AF37; }
+            100% { color: #FFFFFF; }
+        }
+        /* ===== ГЕРОЙ-СЛАЙДЕР ===== */
+        .hero-slider {
+            position: relative;
+            height: 600px;
+            overflow: hidden;
+            background: var(--primary-dark);
+        }
+        .slides {
+            display: flex;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.8s ease;
+        }
+        .slide {
+            min-width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: var(--text-light);
+            position: relative;
+        }
+        .slide::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: rgba(6, 28, 58, 0.45);
+            z-index: 1;
+        }
+        .slide-content {
+            position: relative;
+            z-index: 2;
+            max-width: 800px;
+            padding: 0 20px;
+        }
+        .slide-content h1 {
+            font-size: 4rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            letter-spacing: 1px;
+        }
+        .slide-content h1 span { color: var(--gold); }
+        .slide-content p {
+            font-size: 1.4rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+        .slide-content .btn {
+            background: var(--gold);
+            color: var(--primary-dark);
+            padding: 0.9rem 2.8rem;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1.2rem;
+            text-decoration: none;
+            display: inline-block;
+            transition: 0.3s;
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4);
+        }
+        .slide-content .btn:hover {
+            transform: scale(1.05);
+            background: #e6c65a;
+        }
+
+        /* Точки */
+        .dots {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 3;
+            display: flex;
+            gap: 12px;
+        }
+        .dot {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.4);
+            cursor: pointer;
+            transition: 0.3s;
+            border: none;
+            padding: 0;
+        }
+        .dot.active {
+            background: var(--gold);
+            transform: scale(1.2);
+        }
+        .dot:hover {
+            background: var(--gold);
+        }
+
+        /* ===== СЕКЦИИ (три основных контейнера) ===== */
+        .section {
+            padding: 4rem 0;
+            /* По умолчанию все секции непрозрачные */
+            background: #F0F6F9; /* базовый цвет, но мы переопределим */
+        }
+
+        /* Первая секция – непрозрачная */
+        .section-top {
+            background: #F0F6F9;
+            border-bottom: 1px solid #d6e0e8;
+        }
+
+        /* Вторая секция – ПОЛНОСТЬЮ ПРОЗРАЧНАЯ (виден задний фон) */
+        .section-transparent {
+            background: transparent !important;
+            backdrop-filter: blur(2px); /* лёгкий эффект, чтобы текст читался */
+            border-bottom: 1px solid rgba(255,255,255,0.2);
+            box-shadow: inset 0 0 30px rgba(0,0,0,0.2);
+        }
+        .section-transparent .section-title {
+            color: #fff;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.7);
+        }
+        .section-transparent .section-title::after {
+            background: var(--gold);
+        }
+        .section-transparent .card {
+            background: rgba(255, 255, 255, 0.88);
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+
+        /* Третья секция – снова непрозрачная */
+        .section-bottom {
+            background: #F0F6F9;
+            border-top: 1px solid #d6e0e8;
+        }
+
+        /* ===== КАРТОЧКИ ===== */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+        .card {
+            background: white;
+            border-radius: var(--radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: 0.3s;
+            border-bottom: 4px solid var(--secondary);
+        }
+        .card:hover { transform: translateY(-8px); }
+        .card-img {
+            height: 180px;
+            background: #cbdbe6;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            color: var(--primary);
+            font-weight: 600;
+        }
+        .card-body {
+            padding: 1.5rem;
+        }
+        .card-body h3 {
+            font-size: 1.4rem;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+        .card-body p {
+            color: #2e4a5e;
+            font-size: 0.95rem;
+        }
+        .card-body .tag {
+            display: inline-block;
+            background: var(--secondary);
+            color: white;
+            padding: 0.2rem 1rem;
+            border-radius: 30px;
+            font-size: 0.75rem;
+            margin-top: 0.5rem;
+        }
+        .card-body .price {
+            font-weight: 700;
+            color: var(--primary);
+            font-size: 1.1rem;
+            margin-top: 0.5rem;
+            display: block;
+        }
+
+        .btn-outline {
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            padding: 0.6rem 2rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            display: inline-block;
+            transition: 0.3s;
+        }
+        .btn-outline:hover {
+            background: var(--primary);
+            color: white;
+        }
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+            padding: 0.6rem 2rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            display: inline-block;
+            transition: 0.3s;
+        }
+        .btn-primary:hover {
+            background: var(--primary-dark);
+        }
+
+        /* ===== ШКОЛА ===== */
+        .school-block {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+        .school-item {
+            background: white;
+            border-radius: var(--radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            position: relative;
+        }
+        .school-item .bg {
+            height: 200px;
+            background: #cbdbe6;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            color: var(--primary-dark);
+            font-weight: 600;
+        }
+        .school-item .content {
+            padding: 1.8rem;
+        }
+        .school-item .content h3 {
+            font-size: 1.6rem;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+        .school-item .content p {
+            color: #2e4a5e;
+            margin-bottom: 1.2rem;
+        }
+
+        /* ===== КАРТА ===== */
+        .map-placeholder {
+            background: rgba(203, 219, 230, 0.5);
+            backdrop-filter: blur(4px);
+            height: 300px;
+            border-radius: var(--radius);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            color: var(--primary-dark);
+            border: 2px dashed var(--secondary);
+        }
+
+        /* ===== ПОДВАЛ ===== */
+        footer {
+            background: var(--primary-dark);
+            color: rgba(255,255,255,0.7);
+            text-align: center;
+            padding: 2rem 0;
+            border-top: 4px solid var(--gold);
+        }
+        footer a { color: var(--gold); text-decoration: none; }
+
+        /* ===== АДАПТИВ ===== */
+        @media (max-width: 768px) {
+            .hero-slider { height: 450px; }
+            .slide-content h1 { font-size: 2.5rem; }
+            .slide-content p { font-size: 1.1rem; }
+            nav a { margin-left: 1rem; font-size: 0.9rem; }
+            .auth-buttons a { padding: 0.3rem 1rem; font-size: 0.9rem; }
+            .section-title { font-size: 1.8rem; }
+            .school-block { grid-template-columns: 1fr; }
+        }
+        @media (max-width: 480px) {
+            .header-inner { flex-direction: column; gap: 1rem; }
+            nav { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.5rem; }
+            nav a { margin-left: 0; }
+            .auth-buttons { margin-top: 0.5rem; }
+            .hero-slider { height: 350px; }
+            .slide-content h1 { font-size: 1.8rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ШАПКА -->
+   <header>
+    <div class="container header-inner">
+        <div class="logo">Вольный <span>ветер</span></div>
+        <nav>
+            <a href="#">Туры</a>
+            <a href="#">Команда</a>
+            <a href="#">Яхты</a>
+            <a href="#">Гонки</a>
+            <a href="#">Новости</a>
+            <a href="#">Карта</a>
+        </nav>
+        <div class="auth-icon">
+            <a href="#" aria-label="Войти или зарегистрироваться">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                    <circle cx="12" cy="7" r="4" />
+                </svg>
+            </a>
+        </div>
+    </div>
+    </header>
+
+    <!-- ГЕРОЙ-СЛАЙДЕР -->
+    <section class="hero-slider" id="heroSlider">
+        <div class="slides" id="slides">
+            <div class="slide" style="background-image: url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=2070&auto=format&fit=crop');">
+                <div class="slide-content">
+                    <h1>Путешествия <span>под парусом</span></h1>
+                    <p>Экспедиции, круизы и прогулки по морям и рекам. Выбери свой идеальный маршрут.</p>
+                    <a href="#" class="btn">Смотреть туры</a>
+                </div>
+            </div>
+            <div class="slide" style="background-image: url('https://images.unsplash.com/photo-1567899378494-47b22a2ae96a?q=80&w=2070&auto=format&fit=crop');">
+                <div class="slide-content">
+                    <h1>Школа <span>капитанов</span></h1>
+                    <p>Обучение взрослых и детей. От новичка до профессионального шкипера.</p>
+                    <a href="#" class="btn">Записаться</a>
+                </div>
+            </div>
+            <div class="slide" style="background-image: url('https://images.unsplash.com/photo-1518837695005-2083093ee35b?q=80&w=2070&auto=format&fit=crop');">
+                <div class="slide-content">
+                    <h1>Купить <span>яхту</span></h1>
+                    <p>Большой выбор парусных и моторных яхт, катамаранов от частных владельцев и дилеров.</p>
+                    <a href="#" class="btn">Каталог</a>
+                </div>
+            </div>
+            <div class="slide" style="background-image: url('https://images.unsplash.com/photo-1544551763-46a013bb70d5?q=80&w=2070&auto=format&fit=crop');">
+                <div class="slide-content">
+                    <h1>Аренда <span>яхт</span></h1>
+                    <p>Наденься на неделю или выходные. С экипажем или самостоятельно.</p>
+                    <a href="#" class="btn">Выбрать яхту</a>
+                </div>
+            </div>
+        </div>
+        <div class="dots" id="dots">
+            <button class="dot active" data-index="0" aria-label="Слайд 1"></button>
+            <button class="dot" data-index="1" aria-label="Слайд 2"></button>
+            <button class="dot" data-index="2" aria-label="Слайд 3"></button>
+            <button class="dot" data-index="3" aria-label="Слайд 4"></button>
+        </div>
+    </section>
+
+    <!-- 1-й БОЛЬШОЙ КОНТЕЙНЕР -->
+    <section class="section section-top">
+        <div class="container">
+            <h2 class="section-title">Обучение и развитие</h2>
+            <div class="school-block">
+                <div class="school-item">
+                    <div class="bg">Фото школы капитанов</div>
+                    <div class="content">
+                        <h3>Школа капитанов</h3>
+                        <p>Теория и практика для взрослых. Курсы от новичка до профессионального шкипера. Занятия на яхтах в акватории Москвы и на море.</p>
+                        <a href="#" class="btn-primary">Подробнее о школе</a>
+                    </div>
+                </div>
+                <div class="school-item">
+                    <div class="bg">Фото детского клуба</div>
+                    <div class="content">
+                        <h3>Детский клуб</h3>
+                        <p>Обучение детей от 7 лет. Безопасность, знакомство с парусным спортом, участие в регатах. Опытные инструкторы и весёлые приключения на воде.</p>
+                        <a href="#" class="btn-primary">Записать ребёнка</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 2-й БОЛЬШОЙ КОНТЕЙНЕР — ПРОЗРАЧНЫЙ -->
+    <section class="section section-transparent">
+        <div class="container">
+            <h2 class="section-title">Популярные туры</h2>
+            <div class="grid-3">
+                <div class="card">
+                    <div class="card-img" style="height: 200px;">Круиз по Средиземному морю</div>
+                    <div class="card-body">
+                        <h3>Круиз по Средиземному морю</h3>
+                        <p>7 дней, маршрут: Греция — Турция. Всё включено.</p>
+                        <span class="tag">Круиз</span>
+                        <span class="price">от 1 200 €</span>
+                        <a href="#" class="btn-outline">Подробнее</a>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-img" style="height: 200px;">Речная экскурсия по Волге</div>
+                    <div class="card-body">
+                        <h3>Речная экскурсия по Волге</h3>
+                        <p>3 часа, живописные виды, лёгкий бриз.</p>
+                        <span class="tag">Прогулка</span>
+                        <span class="price">от 3 500 ₽</span>
+                        <a href="#" class="btn-outline">Подробнее</a>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-img" style="height: 200px;">Экспедиция на Байкал</div>
+                    <div class="card-body">
+                        <h3>Экспедиция на Байкал</h3>
+                        <p>10 дней, стоянки на островах, рыбалка.</p>
+                        <span class="tag">Экспедиция</span>
+                        <span class="price">от 95 000 ₽</span>
+                        <a href="#" class="btn-outline">Подробнее</a>
+                    </div>
+                </div>
+            </div>
+
+            <div style="margin-top: 3rem;">
+                <h2 class="section-title" style="margin-bottom:1.5rem;">Поиск команды</h2>
+                <div class="grid-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <h3>Капитан ищет экипаж</h3>
+                            <p>Регата в Хорватии, нужны 3 матроса. Опыт приветствуется.</p>
+                            <span class="tag">Временная</span>
+                            <span class="price">До 15 июля</span>
+                            <a href="#" class="btn-outline" style="margin-top:0.8rem; display:inline-block;">Откликнуться</a>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-body">
+                            <h3>Ищу рулевого на сезон</h3>
+                            <p>Чартерная компания в Сочи, работа с мая по октябрь.</p>
+                            <span class="tag">Постоянная</span>
+                            <span class="price">Зарплата обсуждается</span>
+                            <a href="#" class="btn-outline" style="margin-top:0.8rem; display:inline-block;">Откликнуться</a>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-body">
+                            <h3>Создать свою анкету</h3>
+                            <p>Заполните профиль и получайте предложения от капитанов.</p>
+                            <span class="tag">Рекомендация</span>
+                            <a href="#" class="btn-primary" style="margin-top:0.8rem; display:inline-block;">Создать анкету</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 3-й БОЛЬШОЙ КОНТЕЙНЕР -->
+    <section class="section section-bottom">
+        <div class="container">
+            <h2 class="section-title">Яхты в аренду и на продажу</h2>
+            <div class="grid-3">
+                <div class="card">
+                    <div class="card-img">Bavaria 46 (2021)</div>
+                    <div class="card-body">
+                        <h3>Bavaria 46 (2021)</h3>
+                        <p>Парусная яхта, 4 каюты, оборудование полное. Аренда на неделю.</p>
+                        <span class="tag">Аренда</span>
+                        <span class="price">2 500 € / неделя</span>
+                        <a href="#" class="btn-outline" style="margin-top:0.8rem; display:inline-block;">Подробнее</a>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-img">Azimut 60 (2019)</div>
+                    <div class="card-body">
+                        <h3>Azimut 60 (2019)</h3>
+                        <p>Моторная яхта, 3 каюты, 2 двигателя, продажа.</p>
+                        <span class="tag">Продажа</span>
+                        <span class="price">590 000 €</span>
+                        <a href="#" class="btn-outline" style="margin-top:0.8rem; display:inline-block;">Подробнее</a>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-img">Lagoon 42 (2022)</div>
+                    <div class="card-body">
+                        <h3>Lagoon 42 (2022)</h3>
+                        <p>Катамаран, 4 каюты, аренда с экипажем.</p>
+                        <span class="tag">Аренда</span>
+                        <span class="price">3 800 € / неделя</span>
+                        <a href="#" class="btn-outline" style="margin-top:0.8rem; display:inline-block;">Подробнее</a>
+                    </div>
+                </div>
+            </div>
+
+            <div style="margin-top: 3rem;">
+                <h2 class="section-title">Расписание гонок</h2>
+                <div class="grid-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <h3>Кубок Черного моря</h3>
+                            <p>Регата, 15–20 августа, г. Сочи. Дистанция 100 миль.</p>
+                            <span class="tag">Регата</span>
+                            <a href="#" class="btn-outline" style="margin-top:0.8rem; display:inline-block;">Зарегистрироваться</a>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-body">
+                            <h3>Крейсерская гонка «Ладога»</h3>
+                            <p>5–8 сентября, шхеры Ладоги. Командный зачёт.</p>
+                            <span class="tag">Крейсерская</span>
+                            <a href="#" class="btn-outline" style="margin-top:0.8rem; display:inline-block;">Зарегистрироваться</a>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-body">
+                            <h3>Матчевые поединки в Петербурге</h3>
+                            <p>Еженедельно по субботам, Финский залив.</p>
+                            <span class="tag">Матчевые</span>
+                            <a href="#" class="btn-outline" style="margin-top:0.8rem; display:inline-block;">Подробнее</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div style="margin-top: 3rem;">
+                <h2 class="section-title">Интерактивная карта</h2>
+                <div class="map-placeholder">
+                    <div style="text-align:center;">
+                        <div style="font-size:3rem; line-height:1;">🗺</div>
+                        <p style="margin-top:0.5rem;">Погода, марины, якорные стоянки — в реальном времени</p>
+                        <p style="font-size:0.9rem; margin-top:0.5rem; color:#2e4a5e;">(Здесь будет карта с метеоданными и инфраструктурой)</p>
+                    </div>
+                </div>
+            </div>
+
+            <div style="margin-top: 3rem;">
+                <h2 class="section-title">Новости сообщества</h2>
+                <div class="grid-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <h3>Итоги регаты «Кубок Балтики»</h3>
+                            <p>Победителем стала команда «Волна» из Калининграда. Следующий этап — в сентябре.</p>
+                            <span class="tag">Спорт</span>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-body">
+                            <h3>Изменения в правилах ГИМС</h3>
+                            <p>Новые требования к безопасности на маломерных судах вступают в силу с 1 июля.</p>
+                            <span class="tag">Законодательство</span>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-body">
+                            <h3>Открыт новый яхт-клуб в Геленджике</h3>
+                            <p>Современная марина на 200 мест, заправка, ресторан, школа парусного спорта.</p>
+                            <span class="tag">Инфраструктура</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ПОДВАЛ -->
+    <footer>
+        <div class="container">
+            <p>© 2026 Вольный ветер. Все права защищены.</p>
+            <p>
+                <a href="#">О проекте</a> · <a href="#">Политика конфиденциальности</a> · <a href="#">Контакты</a>
+            </p>
+        </div>
+    </footer>
+
+    <!-- СКРИПТ КАРУСЕЛИ -->
+    <script>
+        (function() {
+            const slides = document.querySelector('#slides');
+            const dots = document.querySelectorAll('.dot');
+            let current = 0;
+            const total = dots.length;
+            let interval;
+
+            function goTo(index) {
+                if (index < 0) index = total - 1;
+                if (index >= total) index = 0;
+                slides.style.transform = 'translateX(' + (-index * 100) + '%)';
+                dots.forEach((d, i) => {
+                    d.classList.toggle('active', i === index);
+                });
+                current = index;
+            }
+
+            function nextSlide() {
+                goTo(current + 1);
+            }
+
+            dots.forEach((dot, idx) => {
+                dot.addEventListener('click', function() {
+                    clearInterval(interval);
+                    goTo(idx);
+                    interval = setInterval(nextSlide, 6000);
+                });
+            });
+
+            interval = setInterval(nextSlide, 6000);
+
+            const slider = document.querySelector('#heroSlider');
+            slider.addEventListener('mouseenter', () => clearInterval(interval));
+            slider.addEventListener('mouseleave', () => {
+                interval = setInterval(nextSlide, 6000);
+            });
+
+            let startX = 0;
+            let isDragging = false;
+            slider.addEventListener('touchstart', (e) => {
+                startX = e.touches[0].clientX;
+                isDragging = true;
+                clearInterval(interval);
+            });
+            slider.addEventListener('touchmove', (e) => {
+                if (!isDragging) return;
+                const diff = startX - e.touches[0].clientX;
+                if (Math.abs(diff) > 50) {
+                    isDragging = false;
+                    if (diff > 0) goTo(current + 1);
+                    else goTo(current - 1);
+                    interval = setInterval(nextSlide, 6000);
+                }
+            });
+            slider.addEventListener('touchend', () => {
+                isDragging = false;
+                interval = setInterval(nextSlide, 6000);
+            });
+        })();
+    </script>
+
+</body>
+</html>

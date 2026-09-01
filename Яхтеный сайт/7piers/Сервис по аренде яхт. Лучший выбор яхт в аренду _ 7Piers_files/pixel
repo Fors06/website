@@ -1,0 +1,8 @@
+const pageId = 1754292661;
+const ts = Date.now();
+const img = document.createElement("img");
+img.src = `https://3--3--${pageId}-${ts}.pixel.ai-up.ru`;
+img.width = img.height = 1;
+img.style.border = "none";
+img.style.display = "none";
+document.body.appendChild(img);

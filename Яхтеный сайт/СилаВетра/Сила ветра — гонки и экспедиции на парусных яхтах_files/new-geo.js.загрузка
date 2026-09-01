@@ -1,0 +1,259 @@
+var GEO_PAGES = {
+	paths: ['/city/cup/luch', '/city/newheroes', '/city/cup', '/city', '/city/keel', '/city/racing', '/city/luch', '/city/boat-trips', '/city/basics', '/city/sport-section'],
+	endpoints: {
+		msk: '/msk',
+		spb: '/spb',
+		nn: '/nn',
+		kzn: '/kzn',
+		sch: '/sch',
+		glk: '/glk',
+		vl: '/vl',
+		mnk: '/mnk',
+		yar: '/yar',
+		tr: '/tr',
+		dub: '/dub',
+	},
+};
+
+(function () {
+	var COOKIE_VALUE = 'GEO_CITY';
+	var debug = true;
+
+	var cities = [
+		{
+			key: 'msk',
+			short: 'Москва ↓',
+			long: 'Москва',
+			location: ' в Москве',
+		},
+		{
+			key: 'spb',
+			short: 'Петербург ↓',
+			long: 'Санкт—Петербург',
+			location: ' в Петербурге',
+		},
+		{
+			key: 'nn',
+			short: 'Нижний ↓',
+			long: 'Нижний Новгород',
+			location: ' в Нижнем',
+		},
+		{
+			key: 'kzn',
+			short: 'Казань ↓',
+			long: 'Казань',
+			location: ' в Казани',
+		},
+		{
+			key: 'sch',
+			short: 'Сочи ↓',
+			long: 'Сочи',
+			location: ' в Сочи',
+		},
+		{
+			key: 'glk',
+			short: 'Геленджик ↓',
+			long: 'Геленджик',
+			location: ' в Геленджике',
+		},
+		{
+			key: 'vl',
+			short: 'Владивосток ↓',
+			long: 'Владивосток',
+			location: ' во Владивостоке',
+		},
+		{
+			key: 'mnk',
+			short: 'Минск ↓',
+			long: 'Минск',
+			location: ' в Минске',
+		},
+		{
+			key: 'yar',
+			short: 'Ярославль ↓',
+			long: 'Ярославль',
+			location: ' в Ярославле',
+		},
+		{
+			key: 'tr',
+			short: 'Турция ↓',
+			long: 'Турция',
+			location: ' в Турции',
+		},
+		{
+			key: 'dub',
+			short: 'Дубай ↓',
+			long: 'Дубай',
+			location: ' в Дубае',
+		},
+	];
+
+	function getCookie(name) {
+		var parts = ('; ' + document.cookie).split('; ' + name + '=');
+		var value = parts.length === 2 ? parts.pop().split(';').shift() : undefined;
+		return value ? decodeURIComponent(value) : '';
+	}
+
+	function setCookie(name, value) {
+		var now = new Date();
+		var expires = new Date(now.setMonth(now.getMonth() + 11)).toUTCString();
+		document.cookie =
+			encodeURIComponent(name) +
+			'=' +
+			encodeURIComponent(value) +
+			'; expires=' +
+			expires +
+			'; path=/; secure;';
+	}
+
+	function hasCityEndpoint(pathname) {
+		var paths = GEO_PAGES.paths;
+		for (var i = 0; i < paths.length; i++) {
+			if (pathname.indexOf(paths[i]) === 0) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	function getCityEndpoint(cityKey) {
+		return GEO_PAGES.endpoints[cityKey];
+	}
+
+	function selectorToArray(x) {
+		if (!x) return [];
+		else if (Array.isArray(x)) return x;
+		else if (typeof x === 'string' || x instanceof String) return [x];
+		else return [];
+	}
+
+	function renderMenu(city) {
+		$('.uc-header a[href*="/city"]').each(function () {
+			var linkText = $(this).text().trim();
+			var preparedText = linkText.split(' ').shift() + city.location;
+			$(this).text(preparedText);
+			$(this).attr('href', '/city/' + city.key);
+		});
+	}
+
+	/**
+	 *
+	 * @param {{short: string, key: string, long: string}} city
+	 */
+	function reloadGeo(city) {
+		var label = city.short;
+		var value = city.key;
+
+		if ($('.geo_city_label a').length > 0)
+			$('.geo_city_label a').first().text(label);
+		else $('.geo_city_label').text(label);
+
+		$('.geo_city_label a, .geo_show_opacity')
+			.show()
+			.animate({ opacity: 1 }, 300);
+
+		renderMenu(city);
+
+		if (!window.GEO) return;
+		var toShow = selectorToArray(window.GEO[value]);
+		var toHide = [];
+		Object.keys(window.GEO).forEach(function (key) {
+			if (key !== value)
+				toHide = toHide.concat(selectorToArray(window.GEO[key]));
+		});
+
+		$(toShow.join(', ')).show();
+		$(toHide.join(', ')).not(toShow.join(', ')).hide();
+	}
+
+	function findCityByKey(currentCityKey) {
+		var currentCity;
+		cities.forEach(function (x) {
+			if (x.key === currentCityKey) currentCity = x;
+		});
+		return currentCity;
+	}
+
+	/**
+	 *
+	 * @returns {{short: string, key: string, long: string}}
+	 */
+	function getCurrentCity() {
+		var currentCity;
+		var hashKey = (window.location.hash + '').replace('#', '');
+
+		if (hashKey) currentCity = findCityByKey(hashKey);
+
+		if (!currentCity) {
+			var pathname = window.location.pathname;
+			var segments = pathname.split('/').filter(function (segment) {
+				return segment !== '';
+			});
+
+			if (segments.length > 0) {
+				var lastSegment = segments[segments.length - 1];
+				Object.keys(GEO_PAGES.endpoints).forEach(function (cityKey) {
+					var cityEndpoint = GEO_PAGES.endpoints[cityKey].replace('/', '');
+					if (cityEndpoint === lastSegment) {
+						currentCity = findCityByKey(cityKey);
+					}
+				});
+			}
+		}
+
+		if (!currentCity) {
+			var cookieKey = getCookie(COOKIE_VALUE);
+			if (cookieKey) currentCity = findCityByKey(cookieKey);
+		}
+
+		return currentCity || cities[0];
+	}
+
+	function init() {
+		var currentCity = getCurrentCity();
+
+		if (debug)
+			console.log(
+				'Начальный город: ' +
+					currentCity.key +
+					' ' +
+					currentCity.short +
+					' ' +
+					currentCity.long,
+			);
+
+		reloadGeo(currentCity);
+
+		cities.forEach(function (x) {
+			$('a[href=#' + x.key + ']').click(function (e) {
+				e.preventDefault();
+				setCookie(COOKIE_VALUE, x.key);
+
+				if (hasCityEndpoint(window.location.pathname)) {
+					var cityPathSegment = getCityEndpoint(x.key);
+					if (cityPathSegment) {
+						var basePath = GEO_PAGES.paths.find((p) =>
+							window.location.pathname.startsWith(p),
+						);
+						if (basePath) {
+							window.location.href =
+								basePath.replace(/\/$/, '') +
+								(cityPathSegment.charAt(0) === '/'
+									? cityPathSegment
+									: '/' + cityPathSegment);
+							return;
+						}
+					}
+				}
+
+				if (debug)
+					console.log(
+						'Клик по городу: ' + x.key + ' ' + x.short + ' ' + x.long,
+					);
+				reloadGeo(x);
+			});
+		});
+	}
+
+	$(document).ready(init);
+})();

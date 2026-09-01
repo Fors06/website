@@ -1,0 +1,8 @@
+t.t9ilfN4vNtWC0YpATNAXyoUMfqcbMPdJ9T3VTHlDolnkK9IkxCl4U3VeoOPbrW3wG4_Fcxm9_eR9I1uBzNd7XA - токен песочницы
+
+t.4e2PvoytOaKtom-L0rk2zORdRmARG2bBMIXx8kfGP-ozAXIBUep-i4ywE4aKdTWTpMs7xk6do_bUoRpmW-44QQ - токен основного счета
+
+
+8785258012:AAHjOZCDGmSeMFh1NhtvqKWG0Ea3myRQQFY - токен из телеграмм бота
+
+6043575857 - мой id в тг

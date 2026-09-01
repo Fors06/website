@@ -1,0 +1,78 @@
+
+var NsWidget = function(d, b) {
+    this.elem = document.getElementById(d);
+    this.s = "https://widgets.nausys.com/index.php?module=widget";
+    this.c = b.companyId;
+    if (typeof b.language === "undefined") {
+        this.l = "en"
+    } else {
+        this.l = b.language
+    }
+    if (typeof b.type === "undefined") {
+        this.t = "searchForm"
+    } else {
+        this.t = b.type
+    }
+    if (typeof b.currency === "undefined") {
+        this.currency = "EUR"
+    } else {
+        this.currency = b.currency
+    }
+    if (typeof b.height === "undefined") {
+        var a = this.elem.style.height;
+        this.h = a.replace("px", "")
+    } else {
+        this.h = b.height
+    }
+    if (typeof b.width === "undefined") {
+        var c = this.elem.style.width;
+        this.w = c.replace("px", "")
+    } else {
+        this.w = b.width
+    }
+    if (typeof b.results === "undefined") {
+        this.r = ""
+    } else {
+        this.r = b.results
+    }
+    if (typeof b.method === "undefined") {
+        this.m = ""
+    } else {
+        this.m = b.method
+    }
+    if (typeof b.params === "undefined") {
+        if (this.m == "GET") {
+            this.p = this.getQueryParams()
+        } else {
+            this.p = {}
+        }
+    } else {
+        this.p = b.params
+    }
+    this.display()
+};
+NsWidget.prototype.display = function() {
+    var b = "";
+    for (var a in this.p) {
+        if (this.p.hasOwnProperty(a) && this.p[a] !== "undefined") {
+            if (a != "c" && a != "w" && a != "l") {
+                b += "&" + a + "=" + this.p[a]
+            }
+        }
+    }
+    if (this.t == "searchForm") {
+        this.elem.innerHTML = '<iframe name="NauSYS_frame" scrolling="auto" allowtransparency="true" allowfullscreen="true" src="' + this.s + "&c=" + this.c + "&w=" + this.t + "&currency=" + this.currency + "&l=" + this.l + "&a=" + this.r + "&m=" + this.m + b + '" height="' + this.h + '" width="' + this.w + '" frameborder="0" marginheight="0" marginwidth="0"></iframe>'
+    } else {
+        this.elem.innerHTML = '<iframe name="NauSYS_frame" scrolling="auto" allowtransparency="true" allowfullscreen="true" src="' + this.s + "&c=" + this.c + "&w=" + this.t + "&currency=" + this.currency + "&l=" + this.l + "&a=" + this.r + b + '" height="' + this.h + '" width="' + this.w + '" frameborder="0" marginheight="0" marginwidth="0"></iframe>'
+    }
+    iFrameResize({log: false, inPageLinks: true}, "#nsWidget iframe")
+};
+NsWidget.prototype.getQueryParams = function() {
+    var c = location.href;
+    var b = c.substring(c.indexOf("?") + 1).split("&");
+    for (var d = 0, a = {}; d < b.length; d++) {
+        b[d] = b[d].split("=");
+        a[b[d][0]] = decodeURIComponent(b[d][1])
+    }
+    return a
+};
