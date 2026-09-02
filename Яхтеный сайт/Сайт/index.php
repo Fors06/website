@@ -1,3 +1,8 @@
+<?php
+
+require_once __DIR__ . '/config/config.php';
+
+?>
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -13,6 +18,11 @@
         href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap"
         rel="stylesheet"
     >
+
+    <link
+    rel="stylesheet"
+    href="assets/css/base.css"
+>
 
     <style>
         :root {
@@ -68,97 +78,6 @@
         .container {
             width: min(1240px, calc(100% - 40px));
             margin: 0 auto;
-        }
-
-        /* HEADER */
-
-        .topbar {
-            position: absolute;
-            inset: 0 0 auto;
-            z-index: 20;
-            color: #ffffff;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.16);
-            background: linear-gradient(
-                180deg,
-                rgba(0, 0, 0, 0.28),
-                transparent
-            );
-        }
-
-        .nav {
-            height: 82px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 28px;
-        }
-
-        .brand {
-            display: flex;
-            align-items: center;
-            gap: 11px;
-            font-family: Manrope, sans-serif;
-            font-weight: 800;
-            letter-spacing: -0.04em;
-            font-size: 21px;
-        }
-
-        .brand-mark {
-            width: 38px;
-            height: 38px;
-            border: 1px solid rgba(255, 255, 255, 0.45);
-            border-radius: 12px;
-            display: grid;
-            place-items: center;
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(12px);
-        }
-
-        .brand-mark svg {
-            width: 22px;
-        }
-
-        .navlinks {
-            display: flex;
-            gap: 26px;
-            font-size: 14px;
-            color: rgba(255, 255, 255, 0.84);
-        }
-
-        .navlinks a {
-            transition: 0.2s;
-        }
-
-        .navlinks a:hover {
-            color: #ffffff;
-        }
-
-        .nav-actions {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .icon-btn,
-        .menu-btn {
-            width: 42px;
-            height: 42px;
-            border: 1px solid rgba(255, 255, 255, 0.25);
-            background: rgba(255, 255, 255, 0.09);
-            color: #ffffff;
-            border-radius: 50%;
-            display: grid;
-            place-items: center;
-            backdrop-filter: blur(10px);
-        }
-
-        .icon-btn svg {
-            width: 18px;
-        }
-
-        .menu-btn {
-            display: none;
-            border-radius: 12px;
         }
 
         /*  HERO */
@@ -1025,65 +944,11 @@
 
 <body>
 
-<header class="topbar">
-    <div class="container nav">
+<?php
 
-        <a class="brand" href="#">
-            <span class="brand-mark">
-                <svg
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="1.7"
-                >
-                    <path d="M3 18h18M5 18c3-2 5-5 6-10l7 6c-2 2-4 3-7 4"/>
-                    <path d="M11 8V4h4"/>
-                </svg>
-            </span>
+require_once __DIR__ . '/includes/header.php';
 
-            Вольный ветер
-        </a>
-
-        <nav class="navlinks">
-            <a href="#tours">Туры</a>
-            <a href="#fleet">Яхты</a>
-            <a href="#crew">Экипаж</a>
-            <a href="#races">Гонки</a>
-            <a href="#map">Карта</a>
-            <a href="#news">Новости</a>
-        </nav>
-
-        <div class="nav-actions">
-
-            <button
-                class="icon-btn"
-                aria-label="Войти"
-            >
-                <svg
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="1.8"
-                >
-                    <circle
-                        cx="12"
-                        cy="8"
-                        r="4"
-                    />
-                    <path d="M4 21c.7-4 3.3-6 8-6s7.3 2 8 6"/>
-                </svg>
-            </button>
-
-            <button
-                class="menu-btn"
-                aria-label="Меню"
-            >
-                ☰
-            </button>
-
-        </div>
-    </div>
-</header>
+?>
 
 <main>
 
